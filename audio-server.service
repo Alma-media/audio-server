@@ -1,0 +1,21 @@
+[Unit]
+Description=HTTP Audio Server
+After=network.target sound.target
+
+[Service]
+Type=simple
+User=alma
+Group=alma
+WorkingDirectory=/home/alma/Projects/audio-server
+Environment="PATH=/home/alma/Projects/audio-server/.venv/bin:/usr/bin"
+Environment="DISPLAY=:0"
+Environment="PULSE_SERVER=unix:/run/user/1000/pulse/native"
+ExecStart=/home/alma/Projects/audio-server/.venv/bin/uvicorn audio_server:app --host 0.0.0.0 --port 8800
+Restart=on-failure
+RestartSec=5s
+
+# Audio access
+SupplementaryGroups=audio
+
+[Install]
+WantedBy=multi-user.target
